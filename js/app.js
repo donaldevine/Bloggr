@@ -9,22 +9,61 @@ App.Router.map(function() {
 
 App.PostsRoute = Ember.Route.extend({
     model: function() {
-        return posts;
+        return $.getJSON('http://tomdale.net/api/get_recent_posts/?callback=?').then(function(data) {
+            return data.posts.map(function(post){
+                post.body = post.content;
+                return post;
+            });
+        });
     }
 });
+
+App.PostRoute = Ember.Route.extend({
+    model: function(params) {
+        return $.getJSON('http://tomdale.net/api/get_post/?id='+params.post_id+'&callback=?').then(function(data) {
+            data.post.body = data.post.content;
+            return data.post;
+        });
+    }
+});
+
+App.PostController = Ember.ObjectController.extend({
+    isEditing: false,
+
+    actions: {
+        edit: function() {
+            this.set('isEditing', true);
+        },
+        doneEditing: function() {
+            this.set('isEditing', false);
+        }
+    }
+});
+
+Ember.Handlebars.helper('format-date', function(date) {
+    return moment(date).fromNow();
+});
+
+Ember.Handlebars.helper('format-markdown', function(input) {
+    var converter = new Showdown.converter();
+    return new Handlebars.SafeString(converter.makeHtml(input));
+});
+
+
+
 
 var posts = [{
     id: '1',
     title: "Title of post 1",
     author: { name: "Donal Devine"},
-    date: new Date('12-27-2012'),
+    date: new Date('12-27-2013'),
     excerpt: "This is an exceprt...",
     body: "This is thge body...."
 }, {
     id: '2',
     title: "This is post 2",
     author: { name: "Donal Devine"},
-    date: new Date('12-24-2012'),
+    date: new Date('02-02-2014'),
     excerpt: "Excerpt goes like this...",
     body: "The body of this post goes here...."
 }];
