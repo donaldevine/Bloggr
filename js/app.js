@@ -51,20 +51,3 @@ Ember.Handlebars.helper('format-markdown', function(input) {
 
 
 
-
-var posts = [{
-    id: '1',
-    title: "Title of post 1",
-    author: { name: "Donal Devine"},
-    date: new Date('12-27-2013'),
-    excerpt: "This is an exceprt...",
-    body: "This is thge body...."
-}, {
-    id: '2',
-    title: "This is post 2",
-    author: { name: "Donal Devine"},
-    date: new Date('02-02-2014'),
-    excerpt: "Excerpt goes like this...",
-    body: "The body of this post goes here...."
-}];
-
